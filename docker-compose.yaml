@@ -1,0 +1,20 @@
+version: '3'
+services:
+  mysql:
+    container_name: mysqldb
+    restart: always
+    image: mysql:latest
+    ports:
+    - 3307:3307
+    expose:
+      - 3307 
+    environment:
+       - MYSQL_USER=testpass
+       - MYSQL_PASSWORD=testpass
+       - MYSQL_ROOT_PASSWORD=testpass
+       - MYSQL_DATABASE=tradingservice
+       - MYSQL_TCP_PORT=3307
+    volumes:
+      - D:/pillstrading/mysqldata:/var/lib/mysql
+volumes:
+  my-datavolume:
