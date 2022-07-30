@@ -1,9 +1,5 @@
 package com.tradingservice.controller;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +10,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tradingservice.entity.SymbolDailyPerformance;
 import com.tradingservice.model.DailySymbolPerformanceResponse;
-import com.tradingservice.model.SymbolPerformanceDTO;
 import com.tradingservice.service.DailyPerformanceService;
 import com.tradingservice.webservice.AlphaVantageAPIRestClient;
 
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @AllArgsConstructor
@@ -35,28 +28,15 @@ public class DataIngestionController {
 
 	@PostMapping("/dailyPerformance")
 	@ResponseStatus(HttpStatus.CREATED)
-	public String getResp(@RequestParam String symbol){			
-		
-		DailySymbolPerformanceResponse dailyPerformance=restClient.getDailyPerformance(symbol,"TIME_SERIES_DAILY");
-		Map<String, SymbolPerformanceDTO> response =dailyPerformance.getDailyResponse();
-		if(response!=null) {
-		List<SymbolDailyPerformance> dailyPerformanceList=	response.entrySet().stream().map(entry->{
-				SymbolDailyPerformance entity = new SymbolDailyPerformance();
-				entity.setDay(entry.getKey());
-				SymbolPerformanceDTO dto = entry.getValue();
-				entity.setClose(dto.getClose());
-				entity.setHigh(dto.getHigh());
-				entity.setLow(dto.getLow());
-				entity.setVolume(dto.getVolume());
-				entity.setSymbol(symbol);
-				return entity;
-				
-			}).collect(Collectors.toList());
-			dailyPerformanceService.saveDaiyPerformce(dailyPerformanceList);
+	public void insertDailyPerformanceData(@RequestParam String symbol) {
+
+		DailySymbolPerformanceResponse dailyPerformance = restClient.getDailyPerformance(symbol, "TIME_SERIES_DAILY");
+		if (dailyPerformance != null) {
+			dailyPerformanceService.saveDaiyPerformce(dailyPerformance, symbol);
 		}
-		logger.debug("response:{}",dailyPerformance);
-		 	
-	        return  "Data Inserted";
-	    }
+		logger.debug("response:{}", dailyPerformance);
+
+		
+	}
 
 }

@@ -15,17 +15,7 @@ import com.tradingservice.webservice.AlphaVantageAPIRestClient;
 	    })
 public class TradingServiceApplication {
 
-	public static void main(String[] args) {
-		/*
-		 * BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(); for (int i = 0;
-		 * i < 5; i++) { // "123456" - plain text - user input from user interface
-		 * String passwd = encoder.encode("welcome");
-		 * 
-		 * // passwd - password from database System.out.println(passwd); // print hash
-		 * 
-		 * // true for all 5 iteration System.out.println(encoder.matches("welcome",
-		 * passwd)); }
-		 */
+	public static void main(String[] args) {		
 		SpringApplication.run(TradingServiceApplication.class, args);
 		
 	}
